@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Color {
     Black,
     White
@@ -14,7 +14,7 @@ impl Color {
         }
     }
 }
-#[derive(PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PieceType {
     King,
     Queen,
@@ -24,7 +24,7 @@ pub enum PieceType {
     Pawn
 }
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Piece {
     pub color: Color,
     pub piece_type: PieceType
@@ -119,14 +119,14 @@ impl State {
         row2.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::White, piece_type: PieceType::Pawn }) });
 
         let mut row1 = Vec::<Cell>::new();
-        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Rook }) });
-        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Knight }) });
-        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Bishop })});
-        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Queen }) });
-        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::Black, piece_type: PieceType::King }) });
-        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Bishop }) });
-        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Knight }) });
-        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::Black, piece_type: PieceType::Rook }) });
+        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::White, piece_type: PieceType::Rook }) });
+        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::White, piece_type: PieceType::Knight }) });
+        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::White, piece_type: PieceType::Bishop })});
+        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::White, piece_type: PieceType::Queen }) });
+        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::White, piece_type: PieceType::King }) });
+        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::White, piece_type: PieceType::Bishop }) });
+        row1.push(Cell {color: Color::Black, piece: Some(Piece { color: Color::White, piece_type: PieceType::Knight }) });
+        row1.push(Cell {color: Color::White, piece: Some(Piece { color: Color::White, piece_type: PieceType::Rook }) });
 
         let mut cells = Vec::<Vec<Cell>>::new();
 

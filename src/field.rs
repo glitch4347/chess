@@ -12,9 +12,58 @@ pub struct PiecesTextures {
 impl PiecesTextures {
 
     async fn new() -> PiecesTextures {
-        let t = load_texture("textures/pawn_white.png").await.unwrap();
         let mut map = HashMap::new();
-        map.insert(Piece::new(Color::White, PieceType::Pawn), t);
+
+        map.insert(
+            Piece::new(Color::White, PieceType::Pawn),
+            load_texture("textures/pawn_white.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::White, PieceType::Bishop),
+            load_texture("textures/bishop_white.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::White, PieceType::King),
+            load_texture("textures/king_white.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::White, PieceType::Knight),
+            load_texture("textures/knight_white.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::White, PieceType::Queen),
+            load_texture("textures/queen_white.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::White, PieceType::Rook),
+            load_texture("textures/rook_white.png").await.unwrap()
+        );
+
+        map.insert(
+            Piece::new(Color::Black, PieceType::Pawn),
+            load_texture("textures/pawn_black.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::Black, PieceType::Bishop),
+            load_texture("textures/bishop_black.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::Black, PieceType::King),
+            load_texture("textures/king_black.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::Black, PieceType::Knight),
+            load_texture("textures/knight_black.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::Black, PieceType::Queen),
+            load_texture("textures/queen_black.png").await.unwrap()
+        );
+        map.insert(
+            Piece::new(Color::Black, PieceType::Rook),
+            load_texture("textures/rook_black.png").await.unwrap()
+        );
+        
         return PiecesTextures { map };
     }
 }
@@ -49,7 +98,7 @@ impl Field {
 
         if cell.piece.is_some() {
             // render texture
-            let t = self.pieces_textures.map.get(&Piece::new(Color::White, PieceType::Pawn)).unwrap();
+            let t = self.pieces_textures.map.get(&cell.piece.unwrap()).unwrap();
             
             let dp = DrawTextureParams {
                 dest_size: Some(macroquad::math::Vec2::new(r_width, r_height)),
