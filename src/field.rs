@@ -45,8 +45,7 @@ impl PiecesTextures {
         }
 
         return Ok(());
-        
-        
+
     }
 
     async fn load_piece_texture(&self, color: Color, piece_type: PieceType) -> anyhow::Result<(Piece, Texture2D)> {
@@ -66,7 +65,9 @@ pub struct Field {
 
 impl Field {
     pub async fn new() -> anyhow::Result<Field> {
-        return Ok(Field { pieces_textures: PiecesTextures::new().await? });
+        return Ok(Field { 
+            pieces_textures: PiecesTextures::new().await? 
+        });
     }
     pub fn render(&self, game: &Game) {
         clear_background(WHITE);
@@ -103,6 +104,10 @@ impl Field {
 
             draw_texture_ex(*t, x, y, WHITE, dp);
         }
-        
+
+        if cell.active {
+            draw_rectangle(x, y, r_width, r_height, RED);
+        }
     }
+
 }

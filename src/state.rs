@@ -66,7 +66,8 @@ impl Cell {
 }
 
 pub struct State {
-    pub cells: Vec<Vec<Cell>>
+    pub cells: Vec<Vec<Cell>>,
+    active: Option<(usize, usize)>
 }
 
 impl State {
@@ -163,8 +164,22 @@ impl State {
         cells.push(row2);
         cells.push(row1);
 
-        return State { cells };
+        return State { cells, active: None };
     }
 
+    pub fn on_click(&mut self, i: usize, j: usize) {
+        if self.active == Some((i, j)) {
+            self.active = None;
+            self.cells[i][j].active = false;
+        } else {
+            if let Some((a, b)) = self.active {
+                self.cells[a][b].active = false;
+            }
+            self.active = Some((i, j));
+            self.cells[i][j].active = true;
+        }
+        
+
+    }
 
 }

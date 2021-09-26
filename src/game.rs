@@ -42,7 +42,17 @@ impl Game {
 
     pub fn on_click(&mut self) {
         let (mouse_x, mouse_y) = mouse_position();
-        println!("{} {}", mouse_x, mouse_y);
+
+        let width = self.width();
+        let height = self.height();
+        let r_width = width / self.state.cells[0].len() as f32;
+        let r_height = height / self.state.cells.len() as f32;
+
+        let i = (mouse_y / r_height).floor() as usize;
+        let j = (mouse_x / r_width).floor() as usize;
+
+        self.state.on_click(i, j);
+
     }
 }
 
