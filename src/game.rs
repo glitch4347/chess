@@ -8,9 +8,9 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new() -> Game {
+    pub async fn new() -> Game {
         return Game {
-            field: Field::new(),
+            field: Field::new().await,
             state: State::new()
         };
     }
