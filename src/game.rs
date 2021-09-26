@@ -1,3 +1,4 @@
+use macroquad::prelude::*;
 use crate::field::{self, Field};
 
 pub struct Game {
@@ -19,8 +20,11 @@ impl Game {
         self.field.render(&self);
     }
 
-    pub fn width() {
-        return 
+    pub fn width(&self) -> f32 {
+        return screen_width();
+    }
+    pub fn height(&self) -> f32 {
+        return screen_height();
     }
 }
 
