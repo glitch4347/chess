@@ -1,14 +1,17 @@
 use macroquad::prelude::*;
 use crate::field::{self, Field};
+use crate::state::State;
 
 pub struct Game {
-    field: Field
+    field: Field,
+    state: State
 }
 
 impl Game {
     pub fn new() -> Game {
         return Game {
-            field: Field::new()
+            field: Field::new(),
+            state: State::new()
         };
     }
 
