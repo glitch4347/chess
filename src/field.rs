@@ -1,5 +1,9 @@
 use macroquad::prelude::*;
 
+use futures::join;
+use anyhow::Result;
+
+
 use std::collections::HashMap;
 
 use crate::game::Game;
@@ -11,60 +15,38 @@ pub struct PiecesTextures {
 
 impl PiecesTextures {
 
-    async fn new() -> PiecesTextures {
-        let mut map = HashMap::new();
+    async fn new() -> anyhow::Result<PiecesTextures> {
+        let map = HashMap::new();
+        let mut res = PiecesTextures { map };
+        res.load_textures().await?;
+        return Ok(res);
+    }
 
-        map.insert(
-            Piece::new(Color::White, PieceType::Pawn),
-            load_texture("textures/pawn_white.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::White, PieceType::Bishop),
-            load_texture("textures/bishop_white.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::White, PieceType::King),
-            load_texture("textures/king_white.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::White, PieceType::Knight),
-            load_texture("textures/knight_white.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::White, PieceType::Queen),
-            load_texture("textures/queen_white.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::White, PieceType::Rook),
-            load_texture("textures/rook_white.png").await.unwrap()
-        );
+    async fn load_textures(&mut self) -> anyhow::Result<()> {
+        self.load_piece_texture(Color::White, PieceType::Pawn).await?;
+        self.load_piece_texture(Color::White, PieceType::Bishop).await?;
+        self.load_piece_texture(Color::White, PieceType::King).await?;
+        self.load_piece_texture(Color::White, PieceType::Knight).await?;
+        self.load_piece_texture(Color::White, PieceType::Queen).await?;
+        self.load_piece_texture(Color::White, PieceType::Rook).await?;
+        self.load_piece_texture(Color::Black, PieceType::Pawn).await?;
+        self.load_piece_texture(Color::Black, PieceType::Bishop).await?;
+        self.load_piece_texture(Color::Black, PieceType::King).await?;
+        self.load_piece_texture(Color::Black, PieceType::Knight).await?;
+        self.load_piece_texture(Color::Black, PieceType::Queen).await?;
+        self.load_piece_texture(Color::Black, PieceType::Rook).await?;
+        return Ok(());
+    }
 
-        map.insert(
-            Piece::new(Color::Black, PieceType::Pawn),
-            load_texture("textures/pawn_black.png").await.unwrap()
+    async fn load_piece_texture(&mut self, color: Color, piece_type: PieceType) -> anyhow::Result<()> {
+        let path = format!(
+            "textures/{}_{}.png", 
+            piece_type.to_string().to_lowercase(),
+            color.to_string().to_lowercase()
         );
-        map.insert(
-            Piece::new(Color::Black, PieceType::Bishop),
-            load_texture("textures/bishop_black.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::Black, PieceType::King),
-            load_texture("textures/king_black.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::Black, PieceType::Knight),
-            load_texture("textures/knight_black.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::Black, PieceType::Queen),
-            load_texture("textures/queen_black.png").await.unwrap()
-        );
-        map.insert(
-            Piece::new(Color::Black, PieceType::Rook),
-            load_texture("textures/rook_black.png").await.unwrap()
-        );
-        
-        return PiecesTextures { map };
+        let t = load_texture(path.as_str()).await?;
+        self.map.insert(Piece::new(color, piece_type), t);
+        return Ok(());
     }
 }
 
@@ -73,8 +55,8 @@ pub struct Field {
 }
 
 impl Field {
-    pub async fn new() -> Field {
-        return Field { pieces_textures: PiecesTextures::new().await };
+    pub async fn new() -> anyhow::Result<Field> {
+        return Ok(Field { pieces_textures: PiecesTextures::new().await? });
     }
     pub fn render(&self, game: &Game) {
         clear_background(WHITE);
@@ -99,7 +81,7 @@ impl Field {
         if cell.piece.is_some() {
             // render texture
             let t = self.pieces_textures.map.get(&cell.piece.unwrap()).unwrap();
-            
+
             let dp = DrawTextureParams {
                 dest_size: Some(macroquad::math::Vec2::new(r_width, r_height)),
                 source: None,

@@ -1,6 +1,8 @@
 use macroquad::prelude::*;
 
-#[derive(Copy, Clone, PartialEq, Eq, Hash)]
+use std::fmt;
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub enum Color {
     Black,
     White
@@ -14,7 +16,14 @@ impl Color {
         }
     }
 }
-#[derive(Copy, Clone, PartialEq, Eq, Hash)]
+
+impl fmt::Display for Color {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub enum PieceType {
     King,
     Queen,
@@ -22,6 +31,12 @@ pub enum PieceType {
     Bishop,
     Knight,
     Pawn
+}
+
+impl fmt::Display for PieceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
