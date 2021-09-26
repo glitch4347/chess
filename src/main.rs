@@ -10,6 +10,7 @@ async fn main() {
     loop {
         if !game_over {
             game.handle_keys();
+            game.render();
         } else {
             clear_background(WHITE);
             if is_key_down(KeyCode::Enter) {
