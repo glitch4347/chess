@@ -1,7 +1,6 @@
 use macroquad::prelude::*;
 
-use futures::join;
-use anyhow::Result;
+use tuple_conv::*;
 
 
 use std::collections::HashMap;
@@ -23,30 +22,41 @@ impl PiecesTextures {
     }
 
     async fn load_textures(&mut self) -> anyhow::Result<()> {
-        self.load_piece_texture(Color::White, PieceType::Pawn).await?;
-        self.load_piece_texture(Color::White, PieceType::Bishop).await?;
-        self.load_piece_texture(Color::White, PieceType::King).await?;
-        self.load_piece_texture(Color::White, PieceType::Knight).await?;
-        self.load_piece_texture(Color::White, PieceType::Queen).await?;
-        self.load_piece_texture(Color::White, PieceType::Rook).await?;
-        self.load_piece_texture(Color::Black, PieceType::Pawn).await?;
-        self.load_piece_texture(Color::Black, PieceType::Bishop).await?;
-        self.load_piece_texture(Color::Black, PieceType::King).await?;
-        self.load_piece_texture(Color::Black, PieceType::Knight).await?;
-        self.load_piece_texture(Color::Black, PieceType::Queen).await?;
-        self.load_piece_texture(Color::Black, PieceType::Rook).await?;
+
+        let res = futures::join!(
+            self.load_piece_texture(Color::White, PieceType::Pawn),
+            self.load_piece_texture(Color::White, PieceType::Bishop),
+            self.load_piece_texture(Color::White, PieceType::King),
+            self.load_piece_texture(Color::White, PieceType::Knight),
+            self.load_piece_texture(Color::White, PieceType::Queen),
+            self.load_piece_texture(Color::White, PieceType::Rook),
+            self.load_piece_texture(Color::Black, PieceType::Pawn),
+            self.load_piece_texture(Color::Black, PieceType::Bishop),
+            self.load_piece_texture(Color::Black, PieceType::King),
+            self.load_piece_texture(Color::Black, PieceType::Knight),
+            self.load_piece_texture(Color::Black, PieceType::Queen),
+            self.load_piece_texture(Color::Black, PieceType::Rook)
+        );
+
+        let r:Vec<anyhow::Result<(Piece, Texture2D)>> = res.to_vec();
+        for k in r {
+            let kk = k.unwrap();
+            self.map.insert(kk.0, kk.1);
+        }
+
         return Ok(());
+        
+        
     }
 
-    async fn load_piece_texture(&mut self, color: Color, piece_type: PieceType) -> anyhow::Result<()> {
+    async fn load_piece_texture(&self, color: Color, piece_type: PieceType) -> anyhow::Result<(Piece, Texture2D)> {
         let path = format!(
             "textures/{}_{}.png", 
             piece_type.to_string().to_lowercase(),
             color.to_string().to_lowercase()
         );
         let t = load_texture(path.as_str()).await?;
-        self.map.insert(Piece::new(color, piece_type), t);
-        return Ok(());
+        return Ok((Piece::new(color, piece_type), t));
     }
 }
 
