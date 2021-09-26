@@ -1,5 +1,6 @@
 use macroquad::prelude::*;
 
+
 pub enum Color {
     Black,
     White
@@ -8,8 +9,8 @@ pub enum Color {
 impl Color {
     pub fn to_color(&self) -> macroquad::color::Color {
         match self {
-            Self::Black => BLACK,
-            Self::White => WHITE,
+            Self::Black => macroquad::color::Color::from_rgba(209, 139, 71 ,255),
+            Self::White => macroquad::color::Color::from_rgba(255, 206, 158 ,255),
         }
     }
 }
@@ -91,7 +92,6 @@ impl State {
         row4.push(Cell {color: Color::Black, piece: None});
 
         let mut row3 = Vec::<Cell>::new();
-        row3.push(Cell {color: Color::White, piece: None});
         row3.push(Cell {color: Color::Black, piece: None});
         row3.push(Cell {color: Color::White, piece: None});
         row3.push(Cell {color: Color::Black, piece: None});
@@ -99,6 +99,7 @@ impl State {
         row3.push(Cell {color: Color::Black, piece: None});
         row3.push(Cell {color: Color::White, piece: None});
         row3.push(Cell {color: Color::Black, piece: None});
+        row3.push(Cell {color: Color::White, piece: None});
 
         let mut row2 = Vec::<Cell>::new();
         row2.push(Cell {color: Color::White, piece: Some(Piece { color: Color::White, pieceType: PieceType::Pawn })});
