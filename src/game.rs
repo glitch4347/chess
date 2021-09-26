@@ -4,7 +4,7 @@ use crate::state::State;
 
 pub struct Game {
     field: Field,
-    state: State
+    pub state: State
 }
 
 impl Game {

@@ -1,10 +1,20 @@
+use macroquad::prelude::*;
 
-enum Color {
+pub enum Color {
     Black,
     White
 }
 
-enum PieceType {
+impl Color {
+    pub fn to_color(&self) -> macroquad::color::Color {
+        match self {
+            Self::Black => BLACK,
+            Self::White => WHITE,
+        }
+    }
+}
+
+pub enum PieceType {
     King,
     Queen,
     Rook,
@@ -13,18 +23,18 @@ enum PieceType {
     Pawn
 }
 
-struct Piece {
-    color: Color,
-    pieceType: PieceType
+pub struct Piece {
+    pub color: Color,
+    pub pieceType: PieceType
 }
 
-struct Cell {
-    color: Color,
-    piece: Option<Piece>
+pub struct Cell {
+    pub color: Color,
+    pub piece: Option<Piece>
 }
 
 pub struct State {
-    cells: Vec<Vec<Cell>>
+    pub cells: Vec<Vec<Cell>>
 }
 
 impl State {
@@ -121,9 +131,7 @@ impl State {
         cells.push(row2);
         cells.push(row1);
 
-        return State {
-            cells: cells
-        };
+        return State { cells };
     }
 
 
