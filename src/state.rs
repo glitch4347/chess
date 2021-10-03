@@ -138,7 +138,10 @@ impl State {
             return;
         }
         let piece = piece.unwrap();
-        
+        let moves = piece.get_possible_moves(i, j);
+        for m in moves {
+            self.cells[m.0][m.1].selected_move = true;
+        }
     }
 
     pub fn on_click(&mut self, i: usize, j: usize) {
@@ -146,12 +149,14 @@ impl State {
         if self.active == Some((i, j)) {
             self.active = None;
             self.cells[i][j].active = false;
+
         } else {
             if let Some((a, b)) = self.active {
                 self.cells[a][b].active = false;
             }
             self.active = Some((i, j));
             self.cells[i][j].active = true;
+            self.set_selected_moves_for_piece(i, j);
         }
     }
 

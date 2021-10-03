@@ -110,6 +110,13 @@ impl Field {
             draw_texture_ex(*t, x, y, WHITE, dp);
         }
 
+        if cell.selected_move {
+            draw_circle(
+                x + r_width / 2., y + r_height / 2., r_width.min(r_height) / 2. , 
+            macroquad::color::Color::from_rgba(0, 0, 0, 100)
+            );
+        }
+
         
     }
 
