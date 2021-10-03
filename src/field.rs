@@ -6,7 +6,9 @@ use tuple_conv::*;
 use std::collections::HashMap;
 
 use crate::game::Game;
-use crate::state::{ Cell, Piece, Color, PieceType };
+use crate::state::{ Cell };
+use crate::types::Color;
+use crate::piece::{ Piece, PieceType };
 
 pub struct PiecesTextures {
     pub map: HashMap<Piece, Texture2D>

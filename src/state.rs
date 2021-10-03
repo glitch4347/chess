@@ -1,66 +1,20 @@
 use macroquad::prelude::*;
 
-use std::fmt;
+use crate::piece::{Piece, PieceType};
+use crate::types::Color;
 
-#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
-pub enum Color {
-    Black,
-    White
-}
-
-impl Color {
-    pub fn to_color(&self) -> macroquad::color::Color {
-        match self {
-            Self::Black => macroquad::color::Color::from_rgba(209, 139, 71 ,255),
-            Self::White => macroquad::color::Color::from_rgba(255, 206, 158 ,255),
-        }
-    }
-}
-
-impl fmt::Display for Color {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
-#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
-pub enum PieceType {
-    King,
-    Queen,
-    Rook,
-    Bishop,
-    Knight,
-    Pawn
-}
-
-impl fmt::Display for PieceType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
-#[derive(Copy, Clone, PartialEq, Eq, Hash)]
-pub struct Piece {
-    pub color: Color,
-    pub piece_type: PieceType
-}
-
-impl Piece {
-    pub fn new(color: Color, piece_type: PieceType) -> Piece {
-        return Piece { color, piece_type };
-    }
-}
 
 pub struct Cell {
     pub color: Color,
     pub piece: Option<Piece>,
-    pub active: bool
+    pub active: bool,
+    pub selected_move: bool
 }
 
 impl Cell {
     pub fn new(color: Color, piece: Option<Piece>) -> Cell {
         return Cell {
-            color, piece, active: false
+            color, piece, active: false, selected_move: false
         }
     }
 }
@@ -167,7 +121,28 @@ impl State {
         return State { cells, active: None };
     }
 
+    fn try_to_select_for_move(&mut self, i: usize, j: usize) -> bool {
+        if i < 0 || j < 0 {
+            return false;
+        }
+        if let Some(_) = self.cells[i][j].piece {
+            return false;
+        }
+        self.cells[i][j].selected_move = true;
+        return true;
+    }
+
+    fn set_selected_moves_for_piece(&mut self, i: usize, j: usize) {
+        let piece = self.cells[i][j].piece;
+        if piece.is_none() {
+            return;
+        }
+        let piece = piece.unwrap();
+        
+    }
+
     pub fn on_click(&mut self, i: usize, j: usize) {
+        // TODO: do nothing if ther eis no figure
         if self.active == Some((i, j)) {
             self.active = None;
             self.cells[i][j].active = false;
@@ -178,8 +153,6 @@ impl State {
             self.active = Some((i, j));
             self.cells[i][j].active = true;
         }
-        
-
     }
 
 }
