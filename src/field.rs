@@ -45,9 +45,7 @@ impl PiecesTextures {
             let kk = k.unwrap();
             self.map.insert(kk.0, kk.1);
         }
-
         return Ok(());
-
     }
 
     async fn load_piece_texture(&self, color: Color, piece_type: PieceType) -> anyhow::Result<(Piece, Texture2D)> {
@@ -91,6 +89,11 @@ impl Field {
         let y = r_height * i as f32;
         draw_rectangle(x, y, r_width, r_height, color);
 
+        let active_color = macroquad::color::Color::from_rgba(0, 255, 71 , 150);
+        if cell.active {
+            draw_rectangle(x, y, r_width, r_height, active_color);
+        }
+
         if cell.piece.is_some() {
             // render texture
             let t = self.pieces_textures.map.get(&cell.piece.unwrap()).unwrap();
@@ -107,9 +110,7 @@ impl Field {
             draw_texture_ex(*t, x, y, WHITE, dp);
         }
 
-        if cell.active {
-            draw_rectangle(x, y, r_width, r_height, RED);
-        }
+        
     }
 
 }
